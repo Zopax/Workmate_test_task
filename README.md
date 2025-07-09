@@ -103,4 +103,12 @@ py -m pytest --cov=csv_processor --cov-report=html tests/ #для Windows
 # Запрос агрегации
 ![image](https://github.com/user-attachments/assets/7086f553-8d93-474c-bb2b-851a1d6feb3b)
 
+---
+
+## Результат тестирования
+![image](https://github.com/user-attachments/assets/798e95a3-1d91-4ec3-b0ad-aa2f7ba90503)
+![keybd_closed_cb_ce680311](https://github.com/user-attachments/assets/1e2cedb5-cd9f-4e60-afd6-114e1c847f58)
+
+
+
 
