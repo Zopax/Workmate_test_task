@@ -79,11 +79,12 @@ python main.py --file ratings.csv --where "category='Electronics'" --aggregate "
 ---
 
 ## 🗂️ Пример CSV-файла
-
+```scv
 id,name,price,quantity,category
 1,iPhone 15,999,45,Electronics
 2,Notebook,2.5,120,Office
 3,Monitor,299,32,Electronics
+```
 
 ---
 
