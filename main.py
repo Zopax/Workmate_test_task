@@ -1,38 +1,41 @@
 import argparse
-import sys
 from csv_processor.services.csv_processor import CSVProcessor
 
 def main():
-    parser = argparse.ArgumentParser(description="Обработчик CSV файлов")
-    parser.add_argument('--file', default='products.csv', help="Путь к CSV файлу")
-    parser.add_argument('--where', help="Условие фильтрации (например: 'rating>4.5')")
-    parser.add_argument('--aggregate', help="Условие агрегации (например: 'price=avg')")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', type=str, default='products.csv')
+    parser.add_argument('--where', type=str)
+    parser.add_argument('--aggregate', type=str)
     args = parser.parse_args()
 
     try:
         processor = CSVProcessor(args.file)
         
-        if not args.where and not args.aggregate:
-            processor.print_table(processor.data)
-            return
-            
-        result = None
+        filtered_data = processor.data
         if args.where:
-            result = processor.filter(args.where)
-            processor.print_table(result)
+            try:
+                filtered_data = processor.filter(args.where)
+                if not filtered_data:
+                    print("Нет данных, соответствующих условию фильтрации")
+                    return
+            except ValueError as e:
+                print(f"Ошибка фильтрации: {e}")
+                return
         
         if args.aggregate:
-            if args.where and result:
-                # Агрегация по отфильтрованным данным
-                agg_result = processor.aggregate(args.aggregate, data=result)
-            else:
-                # Агрегация по всем данным
-                agg_result = processor.aggregate(args.aggregate)
-            processor.print_table(agg_result)
+            try:
+                result = processor.aggregate(args.aggregate, data=filtered_data)
+                print("\nРезультат агрегации:")
+                processor.print_table(result)
+            except ValueError as e:
+                print(f"Ошибка агрегации: {e}")
+                return
+        else:
+            print("\nОтфильтрованные данные:")
+            processor.print_table(filtered_data)
             
     except Exception as e:
         print(f"Критическая ошибка: {e}")
-        sys.exit(1)
 
 if __name__ == '__main__':
     main()

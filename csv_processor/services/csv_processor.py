@@ -79,27 +79,26 @@ class CSVProcessor:
         except ValueError as e:
             raise ValueError(f"Ошибка фильтрации: {str(e)}") from e
 
-    def aggregate(self, condition):
+    def aggregate(self, condition, data=None):
+        data = data if data is not None else self.data
         try:
             if "=" not in condition:
                 raise ValueError("Неверный формат агрегации")
-
+                
             column, func = condition.split("=", 1)
             column = column.strip()
             func = func.strip().lower()
             
             if not column or not func:
                 raise ValueError("Пустое значение в условии агрегации")
-            if column not in self.data[0]:
-                raise ValueError(f"Колонка {column} не существует")
                 
             values = []
-            for row in self.data:
+            for row in data:
                 try:
                     value = row[column]
                     values.append(float(value))
-                except (ValueError, TypeError):
-                    raise ValueError(f"Невозможно преобразовать значение '{value}' в число")
+                except (ValueError, TypeError, KeyError):
+                    continue
                     
             if not values:
                 raise ValueError(f"Нет числовых значений в колонке {column}")
@@ -113,8 +112,8 @@ class CSVProcessor:
             else:
                 raise ValueError(f"Неподдерживаемая агрегатная функция: {func}")
                 
-        except ValueError as e:
-            raise ValueError(f"Ошибка агрегации: {e}") from e
+        except Exception as e:
+            raise ValueError(f"Ошибка агрегации: {str(e)}") from e
 
     @staticmethod
     def print_table(data, title=None):
