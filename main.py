@@ -1,22 +1,38 @@
-import csv
-from tabulate import tabulate
 import argparse
+import sys
+from csv_processor.services.csv_processor import CSVProcessor
 
-def open_file(file):
+def main():
+    parser = argparse.ArgumentParser(description="Обработчик CSV файлов")
+    parser.add_argument('--file', default='products.csv', help="Путь к CSV файлу")
+    parser.add_argument('--where', help="Условие фильтрации (например: 'rating>4.5')")
+    parser.add_argument('--aggregate', help="Условие агрегации (например: 'price=avg')")
+    args = parser.parse_args()
+
     try:
-        with open(file, newline='') as csf:
-            next(csf, None)
-            spamreader = csv.reader(csf, delimiter=',', quotechar='|')
-            spamreader = list(spamreader)
-            print(tabulate(spamreader, headers=["name", "brand", "price", "rating"], tablefmt="grid"))
-    except:  
-        print("Неверно указан файл")
-
+        processor = CSVProcessor(args.file)
+        
+        if not args.where and not args.aggregate:
+            processor.print_table(processor.data)
+            return
+            
+        result = None
+        if args.where:
+            result = processor.filter(args.where)
+            processor.print_table(result)
+        
+        if args.aggregate:
+            if args.where and result:
+                # Агрегация по отфильтрованным данным
+                agg_result = processor.aggregate(args.aggregate, data=result)
+            else:
+                # Агрегация по всем данным
+                agg_result = processor.aggregate(args.aggregate)
+            processor.print_table(agg_result)
+            
+    except Exception as e:
+        print(f"Критическая ошибка: {e}")
+        sys.exit(1)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--file', type=str, default='products.csv')
-    parser.add_argument('--where', type=str, default='rating>4.5')
-    parser.add_argument('--aggregate', type=str, default='rating=min')
-    args = parser.parse_args()
-    open_file(args.file)
+    main()
