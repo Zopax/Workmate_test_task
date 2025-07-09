@@ -96,9 +96,11 @@ py -m pytest --cov=csv_processor --cov-report=html tests/ #для Windows
 ---
 
 ## Результат работы программы
-#
+# Запрос фильтрации 
 ![image](https://github.com/user-attachments/assets/a2b305fd-c484-4855-ad47-4c8585b4a38f)
-
+# Комбинированный запрос
 ![image](https://github.com/user-attachments/assets/bc0a0984-07cd-412e-a672-2427bffb788c)
+# Запрос агрегации
+![image](https://github.com/user-attachments/assets/7086f553-8d93-474c-bb2b-851a1d6feb3b)
 
 
