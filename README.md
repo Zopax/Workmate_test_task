@@ -93,3 +93,12 @@ id,name,price,quantity,category
 pytest --cov=csv_processor --cov-report=html
 py -m pytest --cov=csv_processor --cov-report=html tests/ #для Windows
 ```
+---
+
+## Результат работы программы
+#
+![image](https://github.com/user-attachments/assets/a2b305fd-c484-4855-ad47-4c8585b4a38f)
+
+![image](https://github.com/user-attachments/assets/bc0a0984-07cd-412e-a672-2427bffb788c)
+
+
